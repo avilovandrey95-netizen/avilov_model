@@ -1,0 +1,131 @@
+
+<script type="module" src="https://unpkg.com/@google/model-viewer@^2.0.0/dist/model-viewer.min.js"></script>
+    <style>
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+           background: #595959;
+        }
+        .controls {
+         
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            z-index: 1000;
+            
+        }
+button {
+    position: relative;
+    padding: 11px 31px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    text-shadow: 0 1px 6px rgb(0 0 0 / 30%);
+    background: rgb(153 153 153 / 3%);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 17px rgb(50 50 59 / 50%);
+}
+        button:hover {
+                        transform: translateY(-2px);
+        
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #333;
+            font-size: 18px;
+        }
+        .error {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: #d32f2f;
+            max-width: 80%;
+        }
+        
+        
+    </style>
+
+
+
+
+ 
+
+   
+    
+    <model-viewer id="static-model" src="https://raw.githubusercontent.com/avilovandrey95-netizen/avilov_model/main/modern_chair.glb" 
+    shadow-intensity="1" 
+    camera-controls 
+    ar
+    touch-action="pan-y" alt="A 3D model of an astronaut">
+	
+	
+
+     </model-viewer>
+    
+
+
+
+
+
+    <script>
+        const modelViewer = document.querySelector('model-viewer');
+        const fullscreenButton = document.getElementById('fullscreen-button');
+        const errorMessage = document.getElementById('error-message');
+        const loading = document.querySelector('.loading');
+        
+        // Скрываем индикатор загрузки когда модель загрузится
+        modelViewer.addEventListener('load', () => {
+            loading.style.display = 'none';
+        });
+        
+        // Показываем ошибку если модель не загрузилась
+        modelViewer.addEventListener('error', () => {
+            loading.style.display = 'none';
+            errorMessage.style.display = 'block';
+            errorMessage.innerHTML = 'Ошибка загрузки модели. Убедитесь, что файл modern_chair.glb находится в правильной директории.';
+            console.error('Ошибка загрузки 3D модели');
+        });
+        
+        // Полноэкранный режим
+        fullscreenButton.addEventListener('click', () => {
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => {
+                    console.error('Ошибка при выходе из полноэкранного режима:', err);
+                });
+            } else {
+                modelViewer.requestFullscreen().catch(err => {
+                    console.error('Ошибка при входе в полноэкранный режим:', err);
+                });
+            }
+        });
+    </script>
+     <script>
+                  async function exportGLB() {
+                    const modelViewer = document.getElementById("static-model");
+                    const glTF = await modelViewer.exportScene();
+                    const file = new File([glTF], "export.glb");
+                    const link = document.createElement("a");
+                    link.download = file.name;
+                    link.href = URL.createObjectURL(file);
+                    link.click();
+                  }
+                </script> 
+    
+
+
